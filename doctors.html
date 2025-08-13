@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctors List</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 0; background: #f4f7fb; color: #333; }
+  header { background: linear-gradient(90deg, #00bcd4, #3f51b5); padding: 15px; color: white; text-align: center; font-size: 1.5em; font-weight: bold; }
+  nav { background: #3f51b5; padding: 10px; display: flex; justify-content: center; gap: 20px; }
+  nav a { color: white; text-decoration: none; font-weight: bold; padding: 8px 12px; border-radius: 4px; }
+  nav a:hover { background: rgba(255,255,255,0.2); } 
+  .container { padding: 20px; }
+  .doctor-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+  .doctor-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
+  .doctor-card img { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 10px; }
+  .doctor-card h3 { margin: 10px 0 5px; color: #3f51b5; }
+  .doctor-card p { margin: 5px 0; }
+  .doctor-card button { background: #3f51b5; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; transition: background 0.3s ease; }
+  .doctor-card button:hover { background: #283593; }
+</style>
+</head>
+<body>
+  <header>Our Doctors</header>
+  <nav>
+  <a href="index.html">Home</a>
+  <a href="doctors.html">Doctors</a>
+  <a href="appointments.html">Appointments</a>
+  <a href="profile.html">Profile</a>
+  <a href="history.html">Medical History</a>
+</nav>
+  <div class="container">
+    <div class="doctor-list">
+      <div class="doctor-card"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Doctor"><h3>Dr. Joe Smith</h3><p>Cardiologist</p><p>Mon & Wed - 10:00 AM to 1:00 PM</p><p>10+ years experience</p><button onclick="bookDoctor('Dr. Joe Smith')">Book Appointment</button></div>
+      <div class="doctor-card"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Doctor"><h3>Dr. Angela </h3><p>Dermatologist</p><p>Tue & Thu - 2:00 PM to 5:00 PM</p><p>8+ years experience</p><button onclick="bookDoctor('Dr. Angela')">Book Appointment</button></div>
+      <div class="doctor-card"><img src="https://randomuser.me/api/portraits/men/58.jpg" alt="Doctor"><h3>Dr. Amit Verma</h3><p>Neurologist</p><p>Mon, Wed & Fri - 11:00 AM to 3:00 PM</p><p>12+ years experience</p><button onclick="bookDoctor('Dr. Amit Verma')">Book Appointment</button></div>
+      <div class="doctor-card"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Doctor"><h3>Dr. Natasha</h3><p>Gynecologist</p><p>Tue & Sat - 9:00 AM to 12:00 PM</p><p>9+ years experience</p><button onclick="bookDoctor('Dr. Natasha')">Book Appointment</button></div>
+      <div class="doctor-card"><img src="https://randomuser.me/api/portraits/men/72.jpg" alt="Doctor"><h3>Dr. Sameer Khan</h3><p>Orthopedic</p><p>Mon, Thu & Fri - 4:00 PM to 7:00 PM</p><p>15+ years experience</p><button onclick="bookDoctor('Dr. Sameer Khan')">Book Appointment</button></div>
+      <div class="doctor-card"><img src="https://randomuser.me/api/portraits/women/12.jpg" alt="Doctor"><h3>Dr. Neha Agarwal</h3><p>Pediatrician</p><p>Mon to Fri - 10:00 AM to 2:00 PM</p><p>7+ years experience</p><button onclick="bookDoctor('Dr. Neha Agarwal')">Book Appointment</button></div>
+      <div class="doctor-card"><img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Doctor"><h3>Dr. Vivek Sinha</h3><p>ENT Specialist</p><p>Tue, Thu & Sat - 1:00 PM to 4:00 PM</p><p>11+ years experience</p><button onclick="bookDoctor('Dr. Vivek Sinha')">Book Appointment</button></div>
+      <div class="doctor-card"><img src="https://randomuser.me/api/portraits/women/25.jpg" alt="Doctor"><h3>Dr. Sneha Reddy</h3><p>Ophthalmologist</p><p>Mon & Wed - 3:00 PM to 6:00 PM</p><p>10+ years experience</p><button onclick="bookDoctor('Dr. Sneha Reddy')">Book Appointment</button></div>
+      <div class="doctor-card"><img src="https://randomuser.me/api/portraits/men/90.jpg" alt="Doctor"><h3>Dr. Lee Ho</h3><p>Psychiatrist</p><p>Fri & Sat - 9:00 AM to 12:00 PM</p><p>13+ years experience</p><button onclick="bookDoctor('Dr. Lee Ho')">Book Appointment</button></div>
+    </div>
+  </div>
+  <script>
+    function bookDoctor(name) {
+      localStorage.setItem('selectedDoctor', name);
+      window.location.href = 'book.html';
+    }
+  </script>
+</body>
+</html>

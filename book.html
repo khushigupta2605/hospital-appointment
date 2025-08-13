@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Appointment - Hospital</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background-color: #f8f9fa; }
+    nav { background-color: #007bff; padding: 1rem; display: flex; justify-content: center; }
+    nav a { color: white; text-decoration: none; margin: 0 15px; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    .container { max-width: 600px; margin: 2rem auto; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    h1 { text-align: center; color: #333; }
+    label { display: block; margin-top: 1rem; font-weight: bold; }
+    input, select, button { width: 100%; padding: 0.6rem; margin-top: 0.4rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { background-color: #007bff; color: white; font-weight: bold; cursor: pointer; }
+    button:hover { background-color: #0056b3; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="doctors.html">Doctors</a>
+    <a href="appointments.html">My Appointments</a>
+    <a href="profile.html">Profile</a>
+    <a href="history.html">Medical History</a>
+  </nav>
+  <div class="container">
+    <h1>Book Appointment</h1>
+    <form id="appointmentForm">
+      <label>Doctor</label>
+      <input type="text" id="doctorName" readonly>
+      
+      <label>Date</label>
+      <input type="date" id="date" required>
+      
+      <label>Time</label>
+      <input type="time" id="time" required>
+
+      <button type="submit">Book Appointment</button>
+    </form>
+  </div>
+  <script>
+    const doctorNameInput = document.getElementById('doctorName');
+    const selectedDoctor = localStorage.getItem('selectedDoctor') || '';
+    doctorNameInput.value = selectedDoctor;
+
+    document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+
+      let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+      appointments.push({ doctor: selectedDoctor, date, time });
+      localStorage.setItem('appointments', JSON.stringify(appointments));
+
+      alert('Appointment booked successfully!');
+      window.location.href = 'appointments.html';
+    });
+  </script>
+</body>
+</html>

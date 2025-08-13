@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Appointments</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f4f7fb; margin: 0; }
+  header { background: linear-gradient(90deg, #00bcd4, #3f51b5); padding: 15px; color: white; text-align: center; font-size: 1.5em; font-weight: bold; }
+  nav { background: #3f51b5; padding: 10px; display: flex; justify-content: center; gap: 20px; }
+  nav a { color: white; text-decoration: none; font-weight: bold; padding: 8px 12px; border-radius: 4px; }
+  nav a:hover { background: rgba(255,255,255,0.2); }
+  .container { padding: 20px; }
+  table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+  th { background-color: #3f51b5; color: white; }
+  tr:hover { background-color: #f1f1f1; }
+  .cancel-btn { background: #e53935; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; transition: background 0.3s ease; }
+  .cancel-btn:hover { background: #c62828; }
+</style>
+</head>
+<body>
+<header>My Appointments</header>
+<nav>
+  <a href="index.html">Home</a>
+  <a href="doctors.html">Doctors</a>
+  <a href="appointments.html">Appointments</a>
+  <a href="profile.html">Profile</a>
+  <a href="history.html">Medical History</a>
+</nav>
+<div class="container">
+  <table>
+    <thead>
+      <tr>
+        <th>Doctor</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="appointmentsTable">
+      <!-- Appointments will be populated here -->
+    </tbody>
+  </table>
+</div>
+<script>
+function loadAppointments() {
+  const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+  const tableBody = document.getElementById('appointmentsTable');
+  tableBody.innerHTML = '';
+
+  const today = new Date().toISOString().split('T')[0];
+
+  appointments.forEach((appt, index) => {
+    let actionCell = '';
+
+    if (appt.date < today && !appt.completed) {
+      appt.completed = true;
+      actionCell = `<span style="color:green; font-weight:bold;">Completed ✅</span>
+                    <button onclick="showFeedbackForm(${index})">Give Feedback</button>`;
+    } else if (appt.completed) {
+      actionCell = `<span style="color:green; font-weight:bold;">Completed ✅</span>
+                    <button onclick="showFeedbackForm(${index})">Edit Feedback</button>`;
+    } else {
+      actionCell = `<button class="cancel-btn" onclick="cancelAppointment(${index})">Cancel</button>`;
+    }
+
+    const row = `<tr>
+      <td>${appt.doctor}</td>
+      <td>${appt.date}</td>
+      <td>${appt.time}</td>
+      <td>${actionCell}</td>
+    </tr>`;
+
+    tableBody.innerHTML += row;
+  });
+
+  localStorage.setItem('appointments', JSON.stringify(appointments));
+}
+
+function cancelAppointment(index) {
+  let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+  appointments.splice(index, 1);
+  localStorage.setItem('appointments', JSON.stringify(appointments));
+  loadAppointments();
+}
+
+function showFeedbackForm(index) {
+  let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+  const appt = appointments[index];
+
+  // Create modal-like form
+  const formHtml = `
+    <div id="feedbackModal" style="position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.6); display:flex; justify-content:center; align-items:center;">
+      <div style="background:white; padding:20px; border-radius:10px; width:300px; text-align:center;">
+        <h3>Feedback for Dr. ${appt.doctor}</h3>
+        <div id="starContainer" style="margin:10px 0; font-size:1.5em; cursor:pointer;">
+          ${[1,2,3,4,5].map(i => `<span data-star="${i}">${appt.rating>=i?'★':'☆'}</span>`).join('')}
+        </div>
+        <textarea id="reviewInput" rows="3" placeholder="Write a review...">${appt.review||''}</textarea>
+        <textarea id="feedbackInput" rows="2" placeholder="Additional feedback...">${appt.feedback||''}</textarea>
+        <br><br>
+        <button onclick="saveFeedback(${index})" style="background:#00796b; color:white; padding:10px; border:none; border-radius:5px;">Save</button>
+        <button onclick="closeModal()" style="background:#e53935; color:white; padding:10px; border:none; border-radius:5px; margin-left:10px;">Cancel</button>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', formHtml);
+
+  // Star click logic
+  document.querySelectorAll('#starContainer span').forEach(star => {
+    star.addEventListener('click', function() {
+      const rating = parseInt(this.getAttribute('data-star'));
+      appt.rating = rating; // temporary until save
+      // Update stars visually
+      document.querySelectorAll('#starContainer span').forEach(s => {
+        s.textContent = parseInt(s.getAttribute('data-star')) <= rating ? '★' : '☆';
+      });
+    });
+  });
+}
+
+function saveFeedback(index) {
+  const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+  const appt = appointments[index];
+
+  appt.review = document.getElementById('reviewInput').value;
+  appt.feedback = document.getElementById('feedbackInput').value;
+
+  localStorage.setItem('appointments', JSON.stringify(appointments));
+  closeModal();
+  loadAppointments();
+}
+
+function closeModal() {
+  const modal = document.getElementById('feedbackModal');
+  if (modal) modal.remove();
+}
+
+window.onload = loadAppointments;
+</script>
+</body>
+</html>
